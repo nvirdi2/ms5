@@ -271,8 +271,9 @@ namespace sdds
         if(m_lineupSize > 0)
         {
             cout << m_lineupSize << " Records imported..." << endl;
-            cout << endl;
         }
+        
+        cout << endl;
     }
 
 
