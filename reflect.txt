@@ -1,0 +1,18 @@
+Navdeep Virdi
+166485193
+April 10th, 2021
+Reflection
+
+Overall my experience in this class was okay! I would say I pick up topics very slow 
+and that would become that was difficult because I would have to start early and manage other
+course work at the same time. However, I would say that the workload and me just being slow 
+at understanding topics was the most difficult part of this entire class but the concept that
+was being taught by the professor was easy to look back and play over and over again. There
+were many times where on the workshops and homework I had looked back on to lecture or
+even the website examples. That made it a little easier for me to grasp the concepts. The way the
+quizzes weekly was an overall great experience because it kept the concepts refreshed and I was able
+to look back at the quiz and see what I got wrong and reflect on how to fix that. With all the resources
+and information provided the course was overall great. I learned many new concepts, which include 
+destructor to prevent memory leaks, reference of the current object, allocate and deallocate, and much 
+more. However, I still do believe I could practice more and work on deallocate and realizing in my code 
+that theres gonna be a memory leak or to check before deallocating and everything else. 
