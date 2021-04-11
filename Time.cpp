@@ -106,7 +106,7 @@ namespace sdds
             istr.setstate(ios::failbit);
             return istr;
         }
-        m_min = hours * 60 + minutes;
+        m_minutes = hours * 60 + minutes;
         return istr;
     }
     
