@@ -1,183 +1,323 @@
+// Name: Navdeep Virdi
+// Seneca email: nvirdi2@myseneca.ca
+// Student ID: 166485193
+// Date: April 10th, 2021
+
+//I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+
 #define _CRT_SECURE_NO_WARNINGS
-#include "PreTriage.h"
+
 #include <iostream>
 #include <fstream>
-#include <string>
+
 #include <cstring>
+#include <string>
+
+#include "PreTriage.h"
 
 using namespace std;
-namespace sdds {
+
+namespace sdds 
+{
     PreTriage::PreTriage(const char* dataFilename):
     m_appMenu("General Hospital Pre-Triage Application\n1- Register\n2- Admit",2),
-    m_pMenu("Select Type of Admittance:\n1- Covid Test\n2- Triage",2)
+        m_pMenu("Select Type of Admittance:\n1- Covid Test\n2- Triage",2)
     {
-        int len = strlen(dataFilename);
-        m_dataFilename = new char[len + 1];
+        int lenght;
+
+        lenght = strlen(dataFilename);
+            m_dataFilename = new char[lenght + 1];
+
         strcpy(m_dataFilename, dataFilename);
-        m_dataFilename[len] = '\0';
+            m_dataFilename[lenght] = '\0';
+
         m_averCovidWait = 15;
-        m_averTriageWait = 5;
+            m_averTriageWait = 5;
+
         load();
     }
+
     PreTriage::~PreTriage()
     {
         ofstream fout(m_dataFilename);
+        int x;
+
         cout << "Saving Average Wait Times," << endl;
         cout << "   COVID Test: " << m_averCovidWait << endl;
         cout << "   Triage: " << m_averTriageWait << endl;
+
         fout << m_averCovidWait << "," << m_averTriageWait << endl;
+
         cout << "Saving m_lineup..." << endl;
-        for(int i = 0; i<m_lineupSize; i++)
+
+        for(x = 0; x < m_lineupSize; x++)
         {
-            cout << i+1 << "- "; 
-            m_lineup[i]->csvWrite(cout) << endl; 
-            m_lineup[i]->csvWrite(fout) << endl;
+            cout << x+1 << "- "; 
+
+            m_lineup[x]->csvWrite(cout) << endl; 
+            m_lineup[x]->csvWrite(fout) << endl;
         }
-        for(int i = 0; i<m_lineupSize; i++)
+
+        for(x = 0; x<m_lineupSize; x++)
         {
-            delete m_lineup[i];
+            delete m_lineup[x];
         }
+
         delete[] m_dataFilename;
+
         cout << "done!" << endl;
-        fout.close();
+            fout.close();
     }
-    const Time PreTriage::getWaitTime(const Patient& p)const
-    {
-        Time res;
-        unsigned int count = 0;
-        for(int i = 0; i<m_lineupSize; i++)
-        {
-            if(p.type() == m_lineup[i]->type())
-            {
-                count++;
-            }
-        }
-        if(p.type() == 'C')
-            res = m_averCovidWait * count;
-        else
-            res = m_averTriageWait * count;
-        return res;
-    }
-    void PreTriage::setAverageWaitTime(const Patient& p)
-    {
-        Time CT = Time(getTime());
-        Time PTT = Time(p);
-        Time AWT = p.type() == 'C' ? m_averCovidWait : m_averTriageWait;
-        unsigned int PTN =  p.number();
-        AWT = ((CT - PTT) + (AWT * (PTN - 1))) / PTN;
-        if(p.type() == 'C')
-            m_averCovidWait = AWT;
-        else
-            m_averTriageWait = AWT;
-    }
+
+
+
+
     void PreTriage::removePatientFromLineup(int index)
     {
-        removeDynamicElement(m_lineup, index, m_lineupSize);
+        removeDynamicElement
+            (m_lineup, index, m_lineupSize);
     }
-    int PreTriage::indexOfFirstInLine(char type) const
+
+
+    void PreTriage::run(void)
     {
-        for(int i = 0; i<m_lineupSize; i++)
+        while(true)
         {
-            if(type == m_lineup[i]->type())
+            int UserInput;
+            m_appMenu >> UserInput;
+
+            if(UserInput == 0)
             {
-                return i;
+                return;
             }
+
+                if(UserInput == 1)
+                {
+                    reg();
+                }
+
+                    if(UserInput == 2)
+                    {
+                        admit();
+                    }
         }
-        return -1;
     }
-    void PreTriage::load()
+
+    void PreTriage::admit()
     {
-        cout << "Loading data..." << endl;
-        ifstream fin(m_dataFilename);
-        fin >> m_averCovidWait;
-        fin.ignore();
-        fin >> m_averTriageWait;
-        fin.ignore();
-        Patient *ptr = NULL;
-        for(int i = 0; i < maxNoOfPatients && fin.peek() != EOF; i++)
+        int UserInput;
+        int indx;
+        char TypeIs = '\0';
+
+        m_pMenu >> UserInput;
+
+        if(UserInput == 0)
         {
-            char ch;
-            fin >> ch;
-            if(ch == 'C')
-                ptr = new CovidPatient();
-            if(ch == 'T')
-                ptr = new TriagePatient();
-            if(ptr != NULL)
-            {
-                ptr->fileIO(true);
-                fin >> *ptr;
-                ptr->fileIO(false);
-                m_lineup[i] = ptr;
-                m_lineupSize++;
-            }
+            return;
         }
-        if(fin.peek() != EOF)
-            cout << "Warning: number of records exceeded " << maxNoOfPatients << endl;
-        else if(m_lineupSize == 0)
-            cout << "No data or bad data file!" << endl;
-        if(m_lineupSize > 0)
-            cout << m_lineupSize << " Records imported..." << endl;
-        cout << endl;
+
+            if(UserInput == 1)
+            {
+                TypeIs = 'C';   
+            }
+
+                if(UserInput == 2)
+                {
+                    TypeIs = 'T';
+                }
+
+        indx = indexOfFirstInLine(TypeIs);
+
+            if(indx == -1)
+            {
+                return;
+            }
+
+        cout << endl << "******************************************" << endl;
+
+            m_lineup[indx]->fileIO(false);
+        
+        cout << "Calling for ";
+        
+            cout << *m_lineup[indx];
+
+        cout << "******************************************" << endl << endl;
+        
+            setAverageWaitTime(*m_lineup[indx]);
+            removePatientFromLineup(indx);
     }
+
+    void PreTriage::setAverageWaitTime(const Patient& p)
+    {
+        unsigned int PTN;
+
+        Time CT = Time(getTime());    //CT: Current Time
+        Time PTT = Time(p);    //PTT: Patient's Ticket Time
+        Time AWT = p.type() == 'C' ? m_averCovidWait : m_averTriageWait; //AWT: Average Wait Time (Covid or Triage)
+
+        PTN =  p.number();    //PTN: Patient's Ticket Number
+        AWT = ((CT - PTT) + (AWT * (PTN - 1))) / PTN;  //AWT = ((CT - PTT) + (AWT * (PTN - 1))) / PTN
+
+        if(p.type() != 'C')
+        {
+            m_averTriageWait = AWT;
+        }
+        else 
+        {
+            m_averTriageWait = AWT;
+        }
+    }
+
     void PreTriage::reg()
     {
+        int UserInput;
+
         if(m_lineupSize == maxNoOfPatients)
         {
             cout << "Line up full!" << endl;
             return;
         }
-        int selection;
-        m_pMenu >> selection;
-        if(selection == 0)
+
+        m_pMenu >> UserInput;
+
+        if(UserInput == 0)
+        {
             return;
-        if(selection == 1)
-            m_lineup[m_lineupSize] = new CovidPatient();
-        if(selection == 2)
-            m_lineup[m_lineupSize] = new TriagePatient();
-        m_lineup[m_lineupSize]->setArrivalTime();
+        }
+
+            if(UserInput == 1)
+            {
+                m_lineup[m_lineupSize] = new CovidPatient();
+            }
+
+                if(UserInput == 2)
+                {
+                    m_lineup[m_lineupSize] = new TriagePatient();
+                }
+
+            m_lineup[m_lineupSize]->setArrivalTime();
+
         cout << "Please enter patient information: " << endl;
-        m_lineup[m_lineupSize]->fileIO(false);
-        m_lineup[m_lineupSize]->read(cin);
+        
+            m_lineup[m_lineupSize]->fileIO(false);
+            m_lineup[m_lineupSize]->read(cin);
+        
         cout << endl << "******************************************" << endl;
-        cout << *m_lineup[m_lineupSize];
+        
+            cout << *m_lineup[m_lineupSize];
+        
         cout << "Estimated Wait Time: " << getWaitTime(*m_lineup[m_lineupSize]);
         cout << endl << "******************************************" << endl << endl;
-        m_lineupSize++;
+        
+            m_lineupSize++;
     }
-    void PreTriage::admit()
+
+    void PreTriage::load()
     {
-        int selection;
-        m_pMenu >> selection;
-        char type = '\0';
-        if(selection == 1)
-            type = 'C';
-        if(selection == 2)
-            type = 'T';
-        if(selection == 0)
-            return;
-        int index = indexOfFirstInLine(type);
-        if(index == -1)
-            return;
-        cout << endl << "******************************************" << endl;
-        m_lineup[index]->fileIO(false);
-        cout << "Calling for ";
-        cout << *m_lineup[index];
-        cout << "******************************************" << endl << endl;
-        setAverageWaitTime(*m_lineup[index]);
-        removePatientFromLineup(index);
-    }
-    void PreTriage::run(void)
-    {
-        while(true)
+        int x;
+
+        cout << "Loading data..." << endl;
+
+        ifstream fin(m_dataFilename);
+        fin >> m_averCovidWait;
+
+        fin.ignore();
+
+        fin >> m_averTriageWait;
+
+        fin.ignore();
+
+        Patient *ptr = NULL;
+
+        for(x = 0; x < maxNoOfPatients && fin.peek() != EOF; x++)
         {
-            int selection;
-            m_appMenu >> selection;
-            if(selection == 0)
-                return;
-            if(selection == 1)
-                reg();
-            if(selection == 2)
-                admit();
+            char Character;
+
+            fin >> Character;
+
+            if(Character == 'T')
+            {
+                ptr = new TriagePatient();
+            }
+
+            if(Character == 'C')
+            {
+                ptr = new CovidPatient();
+            }
+
+            if(ptr != NULL)
+            {
+                ptr->fileIO(true);
+
+                    fin >> *ptr;
+
+                ptr->fileIO(false);
+
+                m_lineup[x] = ptr;
+                m_lineupSize++;
+            }
         }
+
+        if(fin.peek() != EOF)
+        {
+            cout << "Warning: number of records exceeded " << maxNoOfPatients << endl;
+        }
+
+        else if(m_lineupSize == 0)
+        {
+            cout << "No data or bad data file!" << endl;
+        }
+
+        if(m_lineupSize > 0)
+        {
+            cout << m_lineupSize << " Records imported..." << endl;
+        }
+
+            cout << endl;
+    }
+
+
+
+
+    int PreTriage::indexOfFirstInLine(char type) const
+    {
+        int x;
+
+        for(x = 0; x<m_lineupSize; x++)
+        {
+            if(type == m_lineup[x]->type())
+            {
+                return x;
+            }
+        } return -1;
+    }
+
+
+
+
+    const Time PreTriage::getWaitTime(const Patient& p)const
+    {
+        unsigned int count = 0;
+        int x;
+
+        Time result;
+
+        for(x = 0; x < m_lineupSize; x++)
+        {
+            if(p.type() == m_lineup[x]->type())
+            {
+                count++;
+            }
+        }
+
+        if(p.type() != 'C')
+        {
+            result = m_averTriageWait * count;
+        }
+
+        else
+        {
+            result = m_averCovidWait * count;
+        } return result;
     }
 }
