@@ -1,55 +1,39 @@
-// Name: Navdeep Virdi
-// Seneca email: nvirdi2@myseneca.ca
-// Student ID: 166485193
-// Date: April 10th, 2021
-
-//I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
-
 #define _CRT_SECURE_NO_WARNINGS
-
+#include "CovidPatient.h"
 #include <iostream>
 
-#include "CovidPatient.h"
-
-namespace sdds 
-{
-    char CovidPatient::type() const 
-    {
-        return 'C';
-    }
-    
-    std::istream& CovidPatient::read(std::istream& is) 
-    {
-        return fileIO() ? csvRead(is) : Patient::read(is);
-    }
-
-    std::ostream& CovidPatient::write(std::ostream& os) const 
-    {
-        if (!(fileIO())) 
-        {
-            os << "COVID TEST" << std::endl;
-            Patient::write(os);
-            os << std::endl;
-        }
-        
-        else 
-        {
-            csvWrite(os);
-        } return os;
-    }
-    
-    int C_Ticket = 1;
-    
-    CovidPatient::CovidPatient() :Patient(C_Ticket) 
-    {
-            C_Ticket++;
-    }
-
-    std::istream& CovidPatient::csvRead(std::istream& is) 
-    {      
-        Patient::csvRead(is);
-        C_Ticket = Patient::number() + 1;
-            return is;
-    }
-
+namespace sdds {
+   int nextCovidTicket = 1;
+   CovidPatient::CovidPatient():Patient(nextCovidTicket)
+   {
+      nextCovidTicket++;
+   }
+   char CovidPatient::type() const
+   {
+      return 'C';
+   }
+   std::istream& CovidPatient::read(std::istream& istr)
+   {
+      return fileIO() ? csvRead(istr) : Patient::read(istr);
+   }
+   std::ostream& CovidPatient::write(std::ostream& ostr) const
+   {
+      if(fileIO())
+      {
+         csvWrite(ostr);
+      }
+      else
+      {
+         ostr << "COVID TEST" << std::endl;
+         Patient::write(ostr);
+         ostr << std::endl;
+      }
+      return ostr;
+   }
+   std::istream& CovidPatient::csvRead(std::istream& istr)
+   {
+      Patient::csvRead(istr);
+      nextCovidTicket = Patient::number() + 1;
+      return istr;
+   }
 }
