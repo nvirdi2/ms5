@@ -165,7 +165,7 @@ namespace sdds
                 return tmp;
     }
 
-    Time &Time::operator-=(const Time &D)
+    /*Time &Time::operator-=(const Time &D)
     {
         if (m_minutes > D.m_minutes)
         {
@@ -209,5 +209,15 @@ namespace sdds
 
             m_minutes = int(Mins + (Hours * 60));
         } return *this;
+    }*/
+    Time& Time::operator-= (const Time& D)
+    {
+        int mins_in_day = 24 * 60;
+        int min_a = (int)(*this);
+        int min_b = (int)(D);
+        int diff = (((min_a - min_b) % mins_in_day ) + mins_in_day) % mins_in_day;
+        m_minutes = diff;
+
+        return *this;
     }
 }
