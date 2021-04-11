@@ -1,152 +1,216 @@
+// Name: Navdeep Virdi
+// Seneca email: nvirdi2@myseneca.ca
+// Student ID: 166485193
+// Date: April 10th, 2021
+
+//I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+
+#include <iostream>
+#include <cmath>
+#include <string>
+
 #include "Time.h"
 #include "utils.h"
-#include <string>
+
 using namespace std;
-namespace sdds {
-    Time& Time::setToNow()
+namespace sdds
+{
+    Time &Time::setToNow()
     {
-        m_min = getTime();
-        return *this;
+        *this = getTime();
+            return (*this);
     }
-    Time::Time(unsigned int min)
+    
+    Time::Time(unsigned int minutes)
     {
-        m_min = min;
+        m_minutes = minutes;
     }
-    std::ostream& Time::write(std::ostream& ostr) const
+
+    ostream &Time::write(ostream &ostr) const
     {
-        unsigned int hours = m_min / 60;
-        unsigned int mins = m_min - hours * 60;
-        if(hours < 10)
-            ostr << "0";
-        ostr << hours << ":";
-        if(mins < 10)
-            ostr << "0";
-        ostr << mins;
+        double Hours = 0;
+        double Mins;
+
+            if (m_minutes >= 60) 
+            {  
+                Hours = floor(m_minutes / 60);
+            }
+        Mins = m_minutes - (60 * Hours);
+
+            ostr.width(2);
+            ostr.fill('0');
+
+            ostr << Hours;
+
+            ostr << ":";
+
+            ostr.width(2);
+            ostr.fill('0');
+
+            ostr << Mins;
+
         return ostr;
     }
+
     std::istream& Time::read(std::istream& istr)
     {
-        int hours = 0;
-        int minutes = 0;
-        char ch = '\0';
+        int Hours;
+        int Minutes;
 
-        istr >> hours;
-        if(hours < 0)
-        {
-            istr.setstate(ios::failbit);
-            return istr;
-        }
-        istr >> ch;
-        if(ch != ':')
-        {
-            istr.setstate(ios::failbit);
-            return istr;
-        }
-        istr >> minutes;
-        if(minutes < 0)
-        {
-            istr.setstate(ios::failbit);
-            return istr;
-        }
-        // if(input_time.length() == 0)
-        // {
-        //     istr.setstate(ios::failbit);
-        //     return istr;
-        // }
-        // for(int i = 0; input_time[i] != '\0'; i++)
-        // {
-        //     if((input_time[i] < '0' || input_time[i] > '9') && input_time[i] != ':')
-        //     {
-        //         istr.setstate(ios::failbit);
-        //         return istr;
-        //     }
-        // }
+        char i = '\0';
 
-        // hours = stoi(input_time.substr(0,input_time.find(':')));
-        // minutes = stoi(input_time.substr(input_time.find(':') + 1));
-        
-        // if(hours < 0 || minutes < 0)
-        //     istr.setstate(ios::failbit);
-        // else 
-        m_min = hours * 60 + minutes;
+        istr >> Hours;
+        if (!(Hours > 0)) {
+            istr.setstate(ios::failbit);
+            return istr;
+        }
+
+
+        istr >> i;
+        if (!(i == ':')) {
+            istr.setstate(ios::failbit);
+            return istr;
+        }
+
+
+        istr >> Minutes;
+        if (Minutes < 0) {
+            istr.setstate(ios::failbit);
+            return istr;
+        }
+
+        m_minutes = Hours * 60 + Minutes;
         return istr;
     }
-    Time& Time::operator-= (const Time& D)
-    {
-        int mins_in_day = 24 * 60;
-        int min_a = (int)(*this);
-        int min_b = (int)(D);
-        int diff = (((min_a - min_b) % mins_in_day ) + mins_in_day) % mins_in_day;
-        m_min = diff;
 
-        return *this;
-    }
-    Time Time::operator-(const Time& D)const
-    {
-        int mins_in_day = 24 * 60;
-        
-        Time ret;
-        int min_a = (int)(*this);
-        int min_b = (int)(D);
-        int diff = (((min_a - min_b) % mins_in_day ) + mins_in_day) % mins_in_day;
-        ret.m_min = diff;
 
-        return ret;
-    }
-    Time& Time::operator+=(const Time& D)
+
+    Time &Time::operator=(unsigned int val)
     {
-        m_min += D.m_min;
-        return *this;
+        m_minutes = val;
+            return *this;
     }
-    Time Time::operator+(const Time& D)const
+
+    Time &Time::operator*=(unsigned int val)
     {
-        Time ret;
-        ret.m_min = m_min + D.m_min;
-        return ret;
+        m_minutes *= val;
+            return *this;
     }
-    Time& Time::operator=(unsigned int val)
+
+    Time &Time::operator/=(unsigned int val)
     {
-        m_min = val;
-        return *this;
+        m_minutes /= val;
+            return *this;
     }
-    Time& Time::operator *= (unsigned int val)
-    {
-        m_min *= val;
-        return *this;
-    }
-    Time Time::operator *(unsigned int val) const
-    {
-        Time ret;
-        ret.m_min = m_min * val;
-        return ret;
-    }
-    Time& Time::operator /= (unsigned int val)
-    {
-        m_min /= val;
-        return *this;
-    }
-    Time Time::operator /(unsigned int val)const
-    {
-        Time ret;
-        ret.m_min = m_min / val;
-        return ret;
-    }
-    Time::operator int()const
-    {
-        return (int)m_min;
-    }
-    Time::operator unsigned int()const
-    {
-        return m_min;
-    }
-    std::ostream& operator<<(std::ostream& ostr, const Time& D)
+
+
+
+    ostream &operator<<(ostream &ostr, const Time &D)
     {
         D.write(ostr);
-        return ostr;
+            return ostr;
     }
-    std::istream& operator>>(std::istream& istr, Time& D)
+
+    istream &operator>>(istream &istr, Time &D)
     {
         D.read(istr);
-        return istr;
+            return istr;
     }
+
+
+
+    Time::operator unsigned int() const
+    {
+        return m_minutes;
+    }
+
+    Time::operator int() const
+    {
+        return int(m_minutes);
+    }
+
+
+
+    Time &Time::operator+=(const Time &D)
+    {
+        m_minutes += D.m_minutes;
+        return *this;
+    }
+
+    Time Time::operator+(const Time &D) const
+    {
+        Time tmp(m_minutes);
+            tmp += D;
+                return tmp;
+    }
+
+
+
+    Time Time::operator-(const Time &D) const
+    {
+        Time tmp(m_minutes);
+        tmp -= D;
+        return tmp;
+    }
+
+    Time Time::operator*(unsigned int val) const
+    {
+        Time tmp(m_minutes);
+            tmp *= val;
+                return tmp;
+    }
+
+    Time Time::operator/(unsigned int val) const
+    {
+        Time tmp(m_minutes);
+            tmp /= val;
+                return tmp;
+    }
+
+    Time &Time::operator-=(const Time &D)
+    {
+        if (m_minutes > D.m_minutes)
+        {
+            m_minutes -= D.m_minutes;
+        }
+            else
+            {
+                double hour = 0;
+                double min;
+                double Hours = 0;
+                double Mins;
+
+            if (m_minutes >= 60)
+            {
+                Hours = floor(m_minutes / 60);
+            }
+                Mins = m_minutes - (60 * Hours);
+
+
+            if (D.m_minutes >= 60)
+            {
+                hour = floor(D.m_minutes / 60);
+            }
+                min = D.m_minutes - (60 * hour);
+
+                if (Mins < min)
+                {
+                    Mins += 60;
+                    Mins -= min;
+                    Hours--;
+                }
+                else
+                {
+                    Mins -= min;
+                }
+
+            double ttime = ceil(hour / 24);
+
+            Hours += 24.0 * ttime;
+            Hours -= hour;
+
+            m_minutes = int(Mins + (Hours * 60));
+        } return *this;
+    }
+
 }
