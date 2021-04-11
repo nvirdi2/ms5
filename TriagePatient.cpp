@@ -1,76 +1,112 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include "TriagePatient.h"
-#include <iostream>
-#include <string>
-#include <cstring>
+// Name: Navdeep Virdi
+// Seneca email: nvirdi2@myseneca.ca
+// Student ID: 166485193
+// Date: April 10th, 2021
 
-namespace sdds {
-   int nextTriageTicket = 1;
-   TriagePatient::TriagePatient():Patient(nextTriageTicket)
-   {
-      m_symptoms = nullptr;
-      nextTriageTicket++;
-   }
-   TriagePatient::~TriagePatient()
-   {
-      delete[] m_symptoms;
-   }
-   char TriagePatient::type() const
-   {
-      return 'T';
-   }
-   std::istream& TriagePatient::read(std::istream& istr)
-   {
-      if(fileIO())
-      {
-         csvRead(istr);
-      }
-      else 
-      {
-         delete[] m_symptoms;
-         Patient::read(istr);
-         std::cout << "Symptoms: ";
-         std::string str;
-         std::getline(istr, str);
-         int len = str.length();
-         m_symptoms = new char[len + 1];
-         strcpy(m_symptoms, str.c_str());
-         m_symptoms[len] = '\0';
-      }
-      return istr;
-   }
-   std::ostream& TriagePatient::write(std::ostream& ostr) const
-   {
-      if(fileIO())
-      {
-         csvWrite(ostr);
-      }
-      else
-      {
-         ostr << "TRIAGE" << std::endl;
-         Patient::write(ostr);
-         ostr << std::endl;
-         ostr << "Symptoms: " << m_symptoms << std::endl;
-      }
-      return ostr;
-   }
-   std::istream& TriagePatient::csvRead(std::istream& istr)
-   {
-      delete[] m_symptoms;
-      Patient::csvRead(istr);
-      istr.ignore();
-      std::string str;
-      std::getline(istr,str,'\n');
-      int len = str.length();
-      m_symptoms = new char[len + 1];
-      strcpy(m_symptoms, str.c_str());
-      m_symptoms[len] = '\0';
-      nextTriageTicket = Patient::number() + 1;
-      return istr;
-   }
-   std::ostream& TriagePatient::csvWrite(std::ostream& ostr) const
-   {
-      Patient::csvWrite(ostr);
-      return ostr << ',' << m_symptoms;
-   }
+//I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <iostream>
+#include <cstring>
+#include <string>
+
+#include "TriagePatient.h"
+
+namespace sdds 
+{
+    TriagePatient::~TriagePatient() 
+    {
+        delete[] symptoms;
+    }
+    
+    char TriagePatient::type() const 
+    {
+        return 'T';
+    }
+
+    std::istream& TriagePatient::read(std::istream& is) 
+    {
+        if (!(fileIO()))
+        {
+            delete[] symptoms;
+
+            Patient::read(is);
+            std::cout << "Symptoms: ";
+
+            std::string str;
+            std::getline(is, str);
+
+            int lenght;
+
+            lenght = str.length();
+            symptoms = new char[lenght + 1];
+
+            strcpy(symptoms, str.c_str());
+
+            symptoms[lenght] = '\0';
+        } 
+        
+        else
+        {
+            csvRead(is);
+        } return is;
+    }
+
+    std::ostream& TriagePatient::write(std::ostream& os) const 
+    {
+        if (!(fileIO()))
+        {
+            os << "TRIAGE" << std::endl;
+
+            Patient::write(os);
+
+            os << std::endl;
+
+            os << "Symptoms: " << symptoms << std::endl;
+        }
+        
+        else
+        {
+            csvWrite(os);
+        } return os;
+    }
+
+    std::ostream& TriagePatient::csvWrite(std::ostream& os) const 
+    {
+        Patient::csvWrite(os);
+            return os << ',' << symptoms;
+    }
+    
+    int T_Ticket = 1;
+    
+    TriagePatient::TriagePatient() :Patient(T_Ticket) 
+    {
+        symptoms = nullptr;
+            T_Ticket++;
+    }
+
+    std::istream& TriagePatient::csvRead(std::istream& is) 
+    {
+        delete[] symptoms;
+
+        Patient::csvRead(is);
+        is.ignore();
+
+        std::string str;
+
+        std::getline(is, str, '\n');
+
+        int lenght;
+
+        lenght = str.length();
+
+        symptoms = new char[lenght + 1];
+        strcpy(symptoms, str.c_str());
+        
+        symptoms[lenght] = '\0';
+        T_Ticket = Patient::number() + 1;
+
+            return is;
+    }
 }
