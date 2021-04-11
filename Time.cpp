@@ -218,7 +218,7 @@ namespace sdds
         int min_a = (int)(*this);
         int min_b = (int)(D);
         int diff = (((min_a - min_b) % mins_in_day ) + mins_in_day) % mins_in_day;
-        m_min = diff;
+        m_minutes = diff;
 
         return *this;
     }
