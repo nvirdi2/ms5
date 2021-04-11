@@ -158,11 +158,12 @@ namespace sdds
         PTN =  p.number();    //PTN: Patient's Ticket Number
         AWT = ((CT - PTT) + (AWT * (PTN - 1))) / PTN;  //AWT = ((CT - PTT) + (AWT * (PTN - 1))) / PTN
 
-        if(p.type() != 'C')
+        if(p.type() == 'C')
         {
-            m_averTriageWait = AWT;
+            m_averCovidWait = AWT;
         }
-        else 
+
+        else
         {
             m_averTriageWait = AWT;
         }
