@@ -26,7 +26,7 @@ namespace sdds
         m_minutes = minutes;
     }
 
-    /*ostream &Time::write(ostream &ostr) const
+    ostream &Time::write(ostream &ostr) const
     {
         double Hours = 0;
         double Mins;
@@ -49,18 +49,6 @@ namespace sdds
 
             ostr << Mins;
 
-        return ostr;
-    }*/
-    std::ostream& Time::write(std::ostream& ostr) const
-    {
-        unsigned int hours = m_minutes / 60;
-        unsigned int mins = m_minutes - hours * 60;
-        if(hours < 10)
-            ostr << "0";
-        ostr << hours << ":";
-        if(mins < 10)
-            ostr << "0";
-        ostr << mins;
         return ostr;
     }
 
