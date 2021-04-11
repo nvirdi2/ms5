@@ -53,17 +53,15 @@ namespace sdds
 
     std::istream& Patient::read(std::istream& is) 
     {
-        int lenght;
-
         std::cout << "Name: ";
-        std::string name;
-        std::getline(is, name);
+        std::string Name;
+        std::getline(is, Name);
 
-        lenght = name.length();
+        int lenght = Name.length();
 
         delete[] m_name;
         m_name = new char[lenght + 1];
-        strcpy(m_name, name.c_str());
+        strcpy(m_name, Name.c_str());
 
         m_name[lenght] = '\0';
 
@@ -72,19 +70,24 @@ namespace sdds
         
             return is;
     }
+
+
+
     std::istream& Patient::csvRead(std::istream& is) 
     {
         int lenght;
 
-        std::string name;
-        std::getline(is, name, ',');
+        std::string Name;
+        is.ignore();
+        getline(is, Name, ',');
 
-        lenght = name.length();
+        
+        lenght = Name.length();
 
         delete[] m_name;
 
         m_name = new char[lenght + 1];
-        strcpy(m_name, name.c_str());
+        strcpy(m_name, Name.c_str());
 
         m_name[lenght] = '\0';
         
