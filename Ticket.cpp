@@ -1,29 +1,63 @@
+// Name: Navdeep Virdi
+// Seneca email: nvirdi2@myseneca.ca
+// Student ID: 166485193
+// Date: April 10th, 2021
+
+//I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+
+#include <iostream>
+
 #include "Ticket.h"
-namespace sdds {
-   Ticket::Ticket(int number) {
-      m_number = number;
+
+namespace sdds 
+{
+   Ticket::Ticket(int NUM) 
+   {
+      num = NUM;
    }
-   Ticket::operator Time() const {
-      return m_time;
+
+
+
+   void Ticket::resetTime() 
+   {
+      time.setToNow();
    }
-   int Ticket::number() const {
-      return m_number;
+
+
+
+   std::istream& Ticket::read(std::istream& is) 
+   {
+         return csvRead(is);
    }
-   void Ticket::resetTime() {
-      m_time.setToNow();
+   std::istream& Ticket::csvRead(std::istream& is) 
+   {
+      is >> num;
+      is.ignore();
+         return is >> time;
    }
-   std::ostream& Ticket::csvWrite(std::ostream& ostr) const {
-      return ostr << m_number << "," << m_time;
+
+
+
+   std::ostream& Ticket::write(std::ostream& os) const 
+   {
+         return os << "Ticket No: " << num << ", Issued at: " << time ;
    }
-   std::istream& Ticket::csvRead(std::istream& istr) {
-      istr >> m_number;
-      istr.ignore();
-      return istr >> m_time;
+   std::ostream& Ticket::csvWrite(std::ostream& os) const 
+   {
+         return os << num << "," << time;
    }
-   std::ostream& Ticket::write(std::ostream& ostr) const {
-      return ostr << "Ticket No: " << m_number << ", Issued at: " << m_time ;
+
+
+
+   Ticket::operator Time() const 
+   {
+         return time;
    }
-   std::istream& Ticket::read(std::istream& istr) {
-      return csvRead(istr);
+
+
+
+   int Ticket::number() const 
+   {
+         return num;
    }
 }
