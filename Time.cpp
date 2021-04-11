@@ -52,15 +52,21 @@ namespace sdds
         return ostr;
     }
 
-    /*std::istream& Time::read(std::istream& istr)
+    std::istream& Time::read(std::istream& istr)
     {
         int Hours;
         int Minutes;
 
         char i = '\0';
 
-        istr >> Hours;
+        /*istr >> Hours;
         if (!(Hours > 0)) {
+            istr.setstate(ios::failbit);
+            return istr;
+        }*/
+        istr >> Hours;
+        if(Hours < 0)
+        {
             istr.setstate(ios::failbit);
             return istr;
         }
@@ -81,34 +87,8 @@ namespace sdds
 
         m_minutes = Hours * 60 + Minutes;
         return istr;
-    }*/
-    std::istream& Time::read(std::istream& istr)
-    {
-        int hours = 0;
-        int minutes = 0;
-        char ch = '\0';
-
-        istr >> hours;
-        if(hours < 0)
-        {
-            istr.setstate(ios::failbit);
-            return istr;
-        }
-        istr >> ch;
-        if(ch != ':')
-        {
-            istr.setstate(ios::failbit);
-            return istr;
-        }
-        istr >> minutes;
-        if(minutes < 0)
-        {
-            istr.setstate(ios::failbit);
-            return istr;
-        }
-        m_minutes = hours * 60 + minutes;
-        return istr;
     }
+    
     
 
     Time &Time::operator=(unsigned int val)
