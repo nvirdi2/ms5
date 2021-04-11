@@ -59,21 +59,20 @@ namespace sdds
 
         char i = '\0';
 
-        /*istr >> Hours;
-        if (!(Hours > 0)) {
-            istr.setstate(ios::failbit);
-            return istr;
-        }*/
         istr >> Hours;
-        if(Hours < 0)
-        {
+        if (!(Hours > 0)) {
             istr.setstate(ios::failbit);
             return istr;
         }
 
-
-        istr >> i;
+        /*istr >> i;
         if (!(i == ':')) {
+            istr.setstate(ios::failbit);
+            return istr;
+        }*/
+        istr >> i;
+        if(i != ':')
+        {
             istr.setstate(ios::failbit);
             return istr;
         }
