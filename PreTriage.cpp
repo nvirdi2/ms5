@@ -19,7 +19,7 @@ using namespace std;
 
 namespace sdds 
 {
-    /*PreTriage::PreTriage(const char* dataFilename):
+    PreTriage::PreTriage(const char* dataFilename):
     m_appMenu("General Hospital Pre-Triage Application\n1- Register\n2- Admit",2),
         m_pMenu("Select Type of Admittance:\n1- Covid Test\n2- Triage",2)
     {
@@ -34,18 +34,6 @@ namespace sdds
         m_averCovidWait = 15;
             m_averTriageWait = 5;
 
-        load();
-    }*/
-    PreTriage::PreTriage(const char* dataFilename):
-    m_appMenu("General Hospital Pre-Triage Application\n1- Register\n2- Admit",2),
-    m_pMenu("Select Type of Admittance:\n1- Covid Test\n2- Triage",2)
-    {
-        int len = strlen(dataFilename);
-        m_dataFilename = new char[len + 1];
-        strcpy(m_dataFilename, dataFilename);
-        m_dataFilename[len] = '\0';
-        m_averCovidWait = 15;
-        m_averTriageWait = 5;
         load();
     }
 
@@ -283,9 +271,8 @@ namespace sdds
         if(m_lineupSize > 0)
         {
             cout << m_lineupSize << " Records imported..." << endl;
-        }
-
             cout << endl;
+        }
     }
 
 
