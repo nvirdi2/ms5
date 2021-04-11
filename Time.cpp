@@ -54,12 +54,12 @@ namespace sdds
 
     std::istream& Time::read(std::istream& istr)
     {
-        int Hours;
-        int Minutes;
+        int Hours = 0;
+        int Minutes = 0;
 
         char i = '\0';
 
-        /*istr >> Hours;
+        istr >> Hours;
         if (!(Hours > 0)) {
             istr.setstate(ios::failbit);
             return istr;
@@ -69,20 +69,7 @@ namespace sdds
         if (!(i == ':')) {
             istr.setstate(ios::failbit);
             return istr;
-        }*/
-        istr >> Hours;
-        if(Hours < 0)
-        {
-            istr.setstate(ios::failbit);
-            return istr;
         }
-        istr >> i;
-        if(i != ':')
-        {
-            istr.setstate(ios::failbit);
-            return istr;
-        }
-
 
         istr >> Minutes;
         if (Minutes < 0) {
