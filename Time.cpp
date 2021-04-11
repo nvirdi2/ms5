@@ -52,7 +52,7 @@ namespace sdds
         return ostr;
     }
 
-    std::istream& Time::read(std::istream& istr)
+    /*std::istream& Time::read(std::istream& istr)
     {
         int Hours;
         int Minutes;
@@ -81,8 +81,34 @@ namespace sdds
 
         m_minutes = Hours * 60 + Minutes;
         return istr;
+    }*/
+    std::istream& Time::read(std::istream& istr)
+    {
+        int hours = 0;
+        int minutes = 0;
+        char ch = '\0';
+
+        istr >> hours;
+        if(hours < 0)
+        {
+            istr.setstate(ios::failbit);
+            return istr;
+        }
+        istr >> ch;
+        if(ch != ':')
+        {
+            istr.setstate(ios::failbit);
+            return istr;
+        }
+        istr >> minutes;
+        if(minutes < 0)
+        {
+            istr.setstate(ios::failbit);
+            return istr;
+        }
+        m_min = hours * 60 + minutes;
+        return istr;
     }
-    
     
 
     Time &Time::operator=(unsigned int val)
@@ -167,7 +193,7 @@ namespace sdds
                 return tmp;
     }
 
-    /*Time &Time::operator-=(const Time &D)
+    Time &Time::operator-=(const Time &D)
     {
         if (m_minutes > D.m_minutes)
         {
@@ -211,16 +237,5 @@ namespace sdds
 
             m_minutes = int(Mins + (Hours * 60));
         } return *this;
-    }*/
-    Time& Time::operator-= (const Time& D)
-    {
-        int mins_in_day = 24 * 60;
-        int min_a = (int)(*this);
-        int min_b = (int)(D);
-        int diff = (((min_a - min_b) % mins_in_day ) + mins_in_day) % mins_in_day;
-        m_minutes = diff;
-
-        return *this;
     }
-
 }
